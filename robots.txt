@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://joshualoren.github.io/invoicebolt/sitemap.xml

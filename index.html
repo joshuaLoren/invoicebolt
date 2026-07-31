@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Invoice Generator — No Sign-Up, No Watermark | Invoicebolt</title>
+  <meta name="description" content="Create a professional invoice in your browser and download the PDF free. No account, no watermark, no limits. Add your logo, tax, discounts, and line items.">
+  <link rel="canonical" href="https://joshualoren.github.io/invoicebolt/">
+  <meta property="og:title" content="Free Invoice Generator — No Sign-Up, No Watermark | Invoicebolt">
+  <meta property="og:description" content="Create a professional invoice in your browser and download the PDF free. No account, no watermark, no limits. Add your logo, tax, discounts, and line items.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://joshualoren.github.io/invoicebolt/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%234f46e5'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-family='Arial'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/invoicebolt/css/style.css">
+  <script>window.__BASE__ = "/invoicebolt";</script>
+  <script src="/invoicebolt/js/app.js" defer></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Invoicebolt","url":"https://joshualoren.github.io/invoicebolt/","applicationCategory":"BusinessApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free invoice generator — no sign-up, no watermark"},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this invoice generator really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every feature — line items, tax, discounts, logo upload, and PDF download — is free with no sign-up, no watermark, and no limits on how many invoices you create."}},{"@type":"Question","name":"Do I need to create an account?","acceptedAnswer":{"@type":"Answer","text":"No. There is no account system at all. Your invoice details are saved privately in your own browser (localStorage), so your business info is already filled in next time you visit."}},{"@type":"Question","name":"Is my data uploaded anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The invoice and PDF are generated entirely in your browser. Nothing you type is sent to a server."}},{"@type":"Question","name":"Can I add my logo and sales tax?","acceptedAnswer":{"@type":"Answer","text":"Yes. Upload a logo, set a tax rate and discount, choose a currency, and add as many line items as you need. The PDF updates to match."}}]}]}</script>
+</head>
+<body>
+  <header class="site-header no-print">
+    <div class="container header-inner">
+      <a class="logo" href="/invoicebolt/">⚡ Invoicebolt</a>
+      <nav>
+        <a href="/invoicebolt/#templates">Templates</a>
+        <a href="/invoicebolt/guides/how-to-invoice-as-a-freelancer/">Guides</a>
+        <a class="nav-cta" href="/invoicebolt/#generator">Create invoice</a>
+      </nav>
+    </div>
+  </header>
+
+  <main><section class="hero no-print">
+  <div class="container">
+    <h1>Free Invoice Generator</h1>
+    <p class="subtitle">Create a professional invoice and download the PDF in about a minute. <strong>No sign-up. No watermark. No limits.</strong> Everything stays in your browser.</p>
+  </div>
+</section>
+
+<section id="generator" class="container generator-grid">
+  <form id="invoice-form" class="invoice-form no-print" autocomplete="off">
+    <h2 class="form-section-title">Your business</h2>
+    <div class="field-row">
+      <label>Business / your name <input type="text" id="from-name" placeholder="Jane Doe Design"></label>
+      <label>Email <input type="email" id="from-email" placeholder="jane@example.com"></label>
+    </div>
+    <div class="field-row">
+      <label>Address <input type="text" id="from-address" placeholder="123 Main St, Austin, TX"></label>
+      <label>Phone <input type="text" id="from-phone" placeholder="(555) 123-4567"></label>
+    </div>
+    <label class="logo-field">Logo (optional)
+      <input type="file" id="logo-input" accept="image/*">
+      <button type="button" id="logo-clear" class="link-btn" hidden>Remove logo</button>
+    </label>
+
+    <h2 class="form-section-title">Bill to</h2>
+    <div class="field-row">
+      <label>Client name <input type="text" id="to-name" placeholder="Acme Corp"></label>
+      <label>Client email <input type="email" id="to-email" placeholder="accounts@acme.com"></label>
+    </div>
+    <label>Client address <input type="text" id="to-address" placeholder="456 Oak Ave, Dallas, TX"></label>
+
+    <h2 class="form-section-title">Invoice details</h2>
+    <div class="field-row three">
+      <label>Invoice # <input type="text" id="inv-number" placeholder="INV-001"></label>
+      <label>Date <input type="date" id="inv-date"></label>
+      <label>Due date <input type="date" id="inv-due"></label>
+    </div>
+    <div class="field-row three">
+      <label>Currency
+        <select id="inv-currency">
+          <option value="USD" selected>USD $</option>
+          <option value="EUR">EUR €</option>
+          <option value="GBP">GBP £</option>
+          <option value="CAD">CAD $</option>
+          <option value="AUD">AUD $</option>
+          <option value="INR">INR Rs.</option>
+        </select>
+      </label>
+      <label>Tax rate % <input type="number" id="inv-tax" min="0" max="100" step="0.01" placeholder="0"></label>
+      <label>Discount % <input type="number" id="inv-discount" min="0" max="100" step="0.01" placeholder="0"></label>
+    </div>
+
+    <h2 class="form-section-title">Line items</h2>
+    <div id="line-items"></div>
+    <button type="button" id="add-item" class="secondary-btn">+ Add line item</button>
+
+    <h2 class="form-section-title">Notes / payment terms</h2>
+    <textarea id="inv-notes" rows="3" placeholder="Payment due within 30 days. Please pay via bank transfer to..."></textarea>
+
+    <div class="action-bar">
+      <button type="button" id="download-pdf" class="primary-btn">⬇ Download PDF</button>
+      <button type="button" id="print-invoice" class="secondary-btn">Print</button>
+      <button type="button" id="clear-invoice" class="link-btn">Start over</button>
+    </div>
+    <p class="privacy-note">🔒 Nothing you type leaves your browser. Your details are saved locally so they're pre-filled next visit.</p>
+    <p class="backup-row">
+      <button type="button" id="export-json" class="link-btn">Export backup</button>
+      <label class="import-label">Import backup<input type="file" id="import-json" accept=".json,application/json" hidden></label>
+    </p>
+  </form>
+
+  <div class="preview-pane">
+    <div class="preview-label no-print">Live preview</div>
+    <div id="invoice-preview" class="invoice-preview">
+      <div class="inv-head">
+        <div>
+          <div id="pv-from-name" class="pv-business">Your Business</div>
+          <div id="pv-from-details" class="pv-muted"></div>
+        </div>
+        <div class="inv-head-right">
+          <img id="pv-logo" alt="" hidden>
+          <div class="pv-invoice-word">INVOICE</div>
+          <div id="pv-number" class="pv-muted"></div>
+        </div>
+      </div>
+      <div class="inv-meta">
+        <div>
+          <div class="pv-label">Bill to</div>
+          <div id="pv-to-name" class="pv-strong"></div>
+          <div id="pv-to-details" class="pv-muted"></div>
+        </div>
+        <div class="inv-dates">
+          <div><span class="pv-label">Date:</span> <span id="pv-date"></span></div>
+          <div><span class="pv-label">Due:</span> <span id="pv-due"></span></div>
+        </div>
+      </div>
+      <table class="pv-table">
+        <thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th class="num">Amount</th></tr></thead>
+        <tbody id="pv-items"></tbody>
+      </table>
+      <div class="pv-totals">
+        <div><span>Subtotal</span><span id="pv-subtotal">$0.00</span></div>
+        <div id="pv-discount-row" hidden><span>Discount</span><span id="pv-discount">–$0.00</span></div>
+        <div id="pv-tax-row" hidden><span id="pv-tax-label">Tax</span><span id="pv-tax">$0.00</span></div>
+        <div class="pv-grand"><span>Total</span><span id="pv-total">$0.00</span></div>
+      </div>
+      <div id="pv-notes" class="pv-notes"></div>
+    </div>
+  </div>
+</section>
+
+<div class="container no-print"><div class="ad-slot" data-slot="under-generator"><!-- AdSense unit goes here after approval --></div></div>
+
+<section class="container info-section no-print">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><strong>Fill in the details.</strong> Your business, your client, and what you're billing for. Add a logo, tax rate, or discount if you need them.</li>
+    <li><strong>Watch the preview.</strong> The invoice on the right updates as you type, so what you see is exactly what your client gets.</li>
+    <li><strong>Download the PDF.</strong> One click, no account, no watermark. Email it to your client and get paid.</li>
+  </ol>
+
+  <h2>Frequently asked questions</h2>
+  <details open><summary>Is this invoice generator really free?</summary><p>Yes. Every feature — line items, tax, discounts, logo upload, and PDF download — is free with no sign-up, no watermark, and no limit on how many invoices you create.</p></details>
+  <details><summary>Do I need to create an account?</summary><p>No. There's no account system at all. Your details are saved privately in your own browser, so everything is pre-filled the next time you visit.</p></details>
+  <details><summary>Is my data uploaded anywhere?</summary><p>No. The invoice and the PDF are generated entirely in your browser. Nothing you type is ever sent to a server — check the network tab if you're curious.</p></details>
+  <details><summary>What should I put on my invoice?</summary><p>At minimum: your name and contact details, your client's, a unique invoice number, the date, a due date, line items with amounts, and how to pay you. Our guide on <a href="/invoicebolt/guides/what-to-include-on-an-invoice/">what to include on an invoice</a> covers all nine essentials.</p></details>
+  <details><summary>Can I save an invoice and edit it later?</summary><p>Yes — your current invoice is automatically saved in your browser as you type. Come back any time on the same device and pick up where you left off.</p></details>
+
+  <h2 id="templates">Invoice templates by profession</h2>
+  <p>Start from a template pre-filled with typical line items for your line of work:</p>
+  <ul class="template-grid">
+    <li><a href="/invoicebolt/invoice-template/photographers/">Photographers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/graphic-designers/">Graphic Designers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/web-developers/">Web Developers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/freelance-writers/">Freelance Writers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/videographers/">Videographers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/consultants/">Consultants invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/cleaning-services/">Cleaning Services invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/plumbers/">Plumbers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/electricians/">Electricians invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/handymen/">Handyman Services invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/landscapers/">Landscapers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/painters/">Painters invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/hair-stylists/">Hair Stylists invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/makeup-artists/">Makeup Artists invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/personal-trainers/">Personal Trainers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/tutors/">Tutors invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/djs/">DJs invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/event-planners/">Event Planners invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/virtual-assistants/">Virtual Assistants invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/social-media-managers/">Social Media Managers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/bookkeepers/">Bookkeepers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/translators/">Translators invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/carpenters/">Carpenters invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/lawn-care/">Lawn Care invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/roofers/">Roofers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/hvac-technicians/">HVAC Technicians invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/pressure-washing/">Pressure Washing invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/window-cleaners/">Window Cleaners invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/pool-cleaning/">Pool Cleaning invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/moving-services/">Moving Services invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/junk-removal/">Junk Removal invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/mobile-mechanics/">Mobile Mechanics invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/pet-sitters/">Pet Sitters invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/babysitters/">Babysitters invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/massage-therapists/">Massage Therapists invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/barbers/">Barbers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/estheticians/">Estheticians invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/music-teachers/">Music Teachers invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/notaries/">Notaries invoice template</a></li>
+<li><a href="/invoicebolt/invoice-template/illustrators/">Illustrators invoice template</a></li>
+  </ul>
+</section>
+</main>
+
+  <footer class="site-footer no-print">
+    <div class="container footer-inner">
+      <div>
+        <strong>⚡ Invoicebolt</strong>
+        <p>Free invoice generator — no sign-up, no watermark. Everything runs in your browser — your data never leaves your device.</p>
+      </div>
+      <div>
+        <strong>Guides</strong>
+        <a href="/invoicebolt/guides/how-to-invoice-as-a-freelancer/">How to invoice as a freelancer</a>
+        <a href="/invoicebolt/guides/what-to-include-on-an-invoice/">What to include on an invoice</a>
+        <a href="/invoicebolt/guides/how-to-get-paid-faster/">How to get paid faster</a>
+        <a href="/invoicebolt/guides/invoice-vs-receipt-vs-quote/">Invoice vs. receipt vs. quote</a>
+      </div>
+      <div>
+        <strong>Site</strong>
+        <a href="/invoicebolt/about/">About</a>
+        <a href="/invoicebolt/privacy/">Privacy policy</a>
+        <a href="/invoicebolt/terms/">Terms of use</a>
+      </div>
+    </div>
+    <div class="container copyright">© 2026 Invoicebolt. Not tax or legal advice.</div>
+  </footer>
+</body>
+</html>
