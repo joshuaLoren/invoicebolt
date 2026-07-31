@@ -73,6 +73,8 @@ a { color: var(--accent); }
 .link-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
 .action-bar { display: flex; gap: 10px; align-items: center; margin-top: 22px; flex-wrap: wrap; }
 .privacy-note { font-size: 0.83rem; color: var(--muted); margin-top: 14px; }
+.backup-row { display: flex; gap: 16px; margin-top: 4px; }
+.import-label { color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
 
 /* Preview */
 .preview-pane { position: sticky; top: 74px; }

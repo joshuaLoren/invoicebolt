@@ -265,6 +265,29 @@
     reader.readAsDataURL(file);
   });
   $("logo-clear").addEventListener("click", () => { setLogo(null); $("logo-input").value = ""; update(); });
+  $("export-json").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(readState(), null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "invoicebolt-backup.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  $("import-json").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        applyState(JSON.parse(reader.result));
+        update();
+      } catch (err) {
+        alert("That file doesn't look like an Invoicebolt backup.");
+      }
+      e.target.value = "";
+    };
+    reader.readAsText(file);
+  });
   form.addEventListener("input", update);
 
   // ---------- init ----------
