@@ -40,6 +40,8 @@ mkdirSync(DIST, { recursive: true });
 // --- Static assets ---
 cpSync(join(SRC, "css"), join(DIST, "css"), { recursive: true });
 cpSync(join(SRC, "js"), join(DIST, "js"), { recursive: true });
+// Root-level passthrough files (e.g. Google verification file) live in src/public
+cpSync(join(SRC, "public"), DIST, { recursive: true });
 writeFileSync(join(DIST, ".nojekyll"), "");
 
 // Client-side prefill data for /?template=<slug>
